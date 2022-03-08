@@ -1,0 +1,37 @@
+scalar DateTime
+
+type Order {
+  id: Int!
+  price: Float!
+  address: String!
+  phone: Int!
+  clientName: String!
+  observation: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CreateOrderInput {
+  price: Float!
+  address: String!
+  phone: Int!
+  clientName: String!
+  observation: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input UpdateOrderInput {
+  id: Int!
+}
+
+type Query {
+  orders: [Order]!
+  order(id: Int!): Order
+}
+
+type Mutation {
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: Int!): Order
+}
