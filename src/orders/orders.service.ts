@@ -1,23 +1,39 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
-// import { CreateOrderInput } from './dto/create-order.input';
-// import { UpdateOrderInput } from './dto/update-order.input';
+import { OrderByParams } from 'src/graphql';
 
 @Injectable()
 export class OrdersService {
   constructor(private prisma: PrismaService) {}
-  // create(createOrderInput: CreateOrderInput) {
-  //   return 'This action adds a new order';
-  // }
-
-  findAll() {
-    return this.prisma.order.findMany();
+  create(createOrderInput: Prisma.OrderCreateInput) {
+    return this.prisma.order.create({
+      data: createOrderInput,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  findAll(orderBy?: OrderByParams) {
+    const { field = 'createdAt', direction = 'desc' } = orderBy || {};
+    return this.prisma.order.findMany({
+      orderBy: { [field]: direction },
+    });
   }
 
+  findOne(orderWhereUniqueInput: Prisma.OrderWhereUniqueInput) {
+    return this.prisma.order.findUnique({
+      where: orderWhereUniqueInput,
+    });
+  }
+
+  async getTotal() {
+    const response = await this.prisma.order.aggregate({
+      _sum: {
+        price: true,
+      },
+    });
+
+    return response._sum.price;
+  }
   // update(id: number, updateOrderInput: UpdateOrderInput) {
   //   return `This action updates a #${id} order`;
   // }

@@ -25,9 +25,15 @@ input UpdateOrderInput {
   id: Int!
 }
 
+input OrderByParams {
+  field: String
+  direction: String
+}
+
 type Query {
-  orders: [Order]!
+  orders(orderBy: OrderByParams): [Order]!
   order(id: Int!): Order
+  totalOrders: Float!
 }
 
 type Mutation {

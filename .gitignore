@@ -37,3 +37,6 @@ node_modules
 
 # Sensitive Data
 .env
+
+#Redundant Data
+@generated

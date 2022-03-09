@@ -1,3 +1,4 @@
+
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -20,6 +21,11 @@ export class UpdateOrderInput {
     id: number;
 }
 
+export class OrderByParams {
+    field?: Nullable<string>;
+    direction?: Nullable<string>;
+}
+
 export class Order {
     id: number;
     price: number;
@@ -32,9 +38,11 @@ export class Order {
 }
 
 export abstract class IQuery {
-    abstract orders(): Nullable<Order>[] | Promise<Nullable<Order>[]>;
+    abstract orders(orderBy?: Nullable<OrderByParams>): Nullable<Order>[] | Promise<Nullable<Order>[]>;
 
     abstract order(id: number): Nullable<Order> | Promise<Nullable<Order>>;
+
+    abstract totalOrders(): number | Promise<number>;
 }
 
 export abstract class IMutation {
