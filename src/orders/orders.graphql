@@ -41,3 +41,11 @@ type Mutation {
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: Int!): Order
 }
+
+type Result {
+  total: Int!
+}
+
+type Subscription {
+  totalUpdated: Result
+}

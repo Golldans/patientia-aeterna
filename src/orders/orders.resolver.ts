@@ -1,15 +1,29 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { OrderCreateInput } from 'src/@generated/prisma-nestjs-graphql/order/order-create.input';
 import { OrderByParams } from 'src/graphql';
 import { OrdersService } from './orders.service';
+import { PubSub } from 'graphql-subscriptions';
 
+const pubSub = new PubSub();
 @Resolver('Order')
 export class OrdersResolver {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Mutation('createOrder')
-  create(@Args('createOrderInput') createOrderInput: OrderCreateInput) {
-    return this.ordersService.create(createOrderInput);
+  async create(@Args('createOrderInput') createOrderInput: OrderCreateInput) {
+    const created = await this.ordersService.create(createOrderInput);
+
+    const total = await this.ordersService.getTotal();
+
+    pubSub.publish('totalUpdated', { totalUpdated: { total } });
+
+    return created;
+  }
+
+  @Subscription()
+  totalUpdated() {
+    console.log('aaaa');
+    return pubSub.asyncIterator('totalupdated');
   }
 
   @Query('orders')

@@ -53,5 +53,13 @@ export abstract class IMutation {
     abstract removeOrder(id: number): Nullable<Order> | Promise<Nullable<Order>>;
 }
 
+export class Result {
+    total: number;
+}
+
+export abstract class ISubscription {
+    abstract totalUpdated(): Nullable<Result> | Promise<Nullable<Result>>;
+}
+
 export type DateTime = any;
 type Nullable<T> = T | null;
